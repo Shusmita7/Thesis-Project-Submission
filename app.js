@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt-nodejs');
+// const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
 const mysql = require('mysql');
@@ -68,41 +68,29 @@ app.get("/",function (req,res){
  };
 
 
+
 app.get("/registration",function (req,res){
     res.render("registration.ejs");
+
 });
- 
+
+
 app.post("/registration",function(req,res){
-    var role=req.body.role;
-    if(req.body.role == "Student"){
-        app.get("/studentReg",function (req,res){
-            res.redirect("/studentReg");
-        });
-    }
-});
-
-app.get("/studentReg",function (req,res){
-    res.render("studentReg.ejs");
-});
-
-app.post("/studentReg", function(req,res){
     var name=req.body.name;
     var email=req.body.email;
     var phone=req.body.phone;
     var password=req.body.password;
     var cpassword =req.body.cpassword;
-    var roll =req.body.roll;
-    var registration = req.body.registration;
-    var session = req.body.session;
+    
 
     if(password==cpassword){
 
-        var sql="INSERT INTO user (name,email,phone,password,role) values('"+name+"','"+email+"','"+phone+"','"+password+"','"+role+"');";
-        var sql2="INSERT INTO student(roll,registration, session) values('"+roll+"','"+registration+"','"+session+"');";
-        con.query(sql,sql2,function (error,result) {
+        var sql="INSERT INTO user (name,email,phone,password) values('"+name+"','"+email+"','"+phone+"','"+password+"');";
+        // var sql2="INSERT INTO student(roll,registration, session) values('"+roll+"','"+registration+"','"+session+"');";
+        con.query(sql,function (error,result) {
             if (error) throw error;
     
-            res.redirect("/login");
+            res.redirect("/user");
         });
     }
     else{
@@ -110,6 +98,95 @@ app.post("/studentReg", function(req,res){
     }
 
 });
+    // res.redirect("/user");
+app.get("/user", function(req,res){
+    res.render("user.ejs");
+});
+    // if(req.body.role == "Student"){
+    //     res.redirect("/login");
+        // app.get("/studentReg",function (req,res){
+        //     res.render("studentReg.ejs");
+        // });
+
+app.post("/user", function(req,res){
+
+    if(req.body.role == "Student"){
+        res.redirect("/studentReg");
+        app.get("/studentReg",function(req,res){
+            res.render("studentReg.ejs");
+        });
+        app.post("/studentReg",function(req,res){
+
+            var roll =req.body.roll;
+            var registration = req.body.registration;
+            var session = req.body.session;
+            var sql="INSERT INTO student(roll,registration, session) values('"+roll+"','"+registration+"','"+session+"');";
+            con.query(sql,function (error,result) {
+                if (error) throw error;
+            
+                res.redirect("/login");
+            });
+        });
+    }
+    if(req.body.role == "Teacher"){
+        res.redirect("/teacherReg");
+        app.get("/teacherReg",function(req,res){
+            res.render("teacherReg.ejs");
+        });
+        app.post("/teacherReg",function(req,res){
+            var designation = req.body.designation;
+            var sql2="INSERT INTO teacher (designation) values('"+designation+"');";
+            con.query(sql2,function (error,result) {
+                if (error) throw error;
+        
+                res.redirect("/login");
+            });
+        });
+
+    }
+});
+            
+//     if(req.body.role == "Teacher"){
+//         res.redirect("/teacherReg");
+//         app.get("/teacherReg",function (req,res){
+//             res.render("teacherReg.ejs");
+//         });
+
+//         app.post("/teacherReg", function(req,res){
+//             var name=req.body.name;
+//             var email=req.body.email;
+//             var phone=req.body.phone;
+//             var password=req.body.password;
+//             var cpassword =req.body.cpassword;
+//             var designation =req.body.designation;
+            
+        
+//             if(password==cpassword){
+        
+//                 var sql="INSERT INTO user (name,email,phone,password) values('"+name+"','"+email+"','"+phone+"','"+password+"');";
+//                 var sql2="INSERT INTO teacher (roll,registration, session) values('"+designation+"');";
+//                 con.query(sql,sql2,function (error,result) {
+//                     if (error) throw error;
+            
+//                     res.redirect("/login");
+//                 });
+//             }
+//             else{
+//                 res.send("<h1>Please confirm your password </h1>")
+//             }
+        
+//         });
+//     }
+// })
+    
+    
+    
+
+// });
+
+
+
+
 
  
 
