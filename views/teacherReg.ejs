@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width initial-scale=1.0">
     <link rel="stylesheet" href="teacherReg.css">
-    <title>Book Store User Login</title>
+    <title>User Login</title>
 </head>
 <body>
 <div class="teacherReg">
     <h1>Sign Up</h1>
     <form action="teacherReg" method="post">
+        <input id="userId" name="userId" value='<%=userId%>' hidden>
         <label for="role">Teacher</label>
         <!-- <select id="role" name="role">
             <option value="Admin">Admin</option>
